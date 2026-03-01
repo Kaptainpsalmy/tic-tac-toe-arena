@@ -1,80 +1,160 @@
-// Wait for DOM to load
+// Game state
+let gameState = null;
+
+// DOM elements
+const boardElement = document.getElementById('board');
+const statusElement = document.querySelector('.status');
+const resetBtn = document.getElementById('resetBtn');
+
+// Initialize game on load
 document.addEventListener('DOMContentLoaded', () => {
-    const boardElement = document.getElementById('board');
-    const statusElement = document.querySelector('.status');
-    const resetBtn = document.getElementById('resetBtn');
+    fetchGameState();
+    setupEventListeners();
+});
 
-    // Create empty board
-    let board = ['', '', '', '', '', '', '', '', ''];
-    let currentPlayer = 'X';
-    let gameActive = true;
+function setupEventListeners() {
+    resetBtn.addEventListener('click', startNewGame);
+}
 
-    // Initialize board UI
-    function renderBoard() {
-        boardElement.innerHTML = '';
-        board.forEach((cell, index) => {
-            const cellElement = document.createElement('div');
-            cellElement.classList.add('cell');
-            if (cell === 'X') cellElement.classList.add('x');
-            if (cell === 'O') cellElement.classList.add('o');
-            cellElement.textContent = cell;
-            cellElement.dataset.index = index;
-            cellElement.addEventListener('click', handleCellClick);
-            boardElement.appendChild(cellElement);
-        });
-    }
+async function fetchGameState() {
+    try {
+        const response = await fetch('/api/game-state');
+        const data = await response.json();
 
-    // Handle cell clicks
-    function handleCellClick(e) {
-        const index = e.target.dataset.index;
-
-        if (!gameActive || board[index] !== '') return;
-
-        // Update board
-        board[index] = currentPlayer;
-        checkGameStatus();
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        renderBoard();
-    }
-
-    // Check win/draw
-    function checkGameStatus() {
-        const winPatterns = [
-            [0,1,2], [3,4,5], [6,7,8], // rows
-            [0,3,6], [1,4,7], [2,5,8], // columns
-            [0,4,8], [2,4,6] // diagonals
-        ];
-
-        for (let pattern of winPatterns) {
-            const [a,b,c] = pattern;
-            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                gameActive = false;
-                statusElement.textContent = `🎉 Player ${board[a]} wins! 🎉`;
-                return;
-            }
-        }
-
-        if (!board.includes('')) {
-            gameActive = false;
-            statusElement.textContent = "🤝 It's a draw! 🤝";
+        if (data.success) {
+            gameState = data.game_state;
+            renderBoard();
         } else {
-            statusElement.textContent = `Player ${currentPlayer}'s turn`;
+            showError('Failed to load game state');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('Network error. Please refresh.');
+    }
+}
+
+async function makeMove(position) {
+    try {
+        const response = await fetch('/api/move', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ position: position })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            gameState = data.game_state;
+            renderBoard();
+            statusElement.textContent = data.message;
+
+            // Highlight winning line if game is won
+            if (data.winning_line) {
+                highlightWinningLine(data.winning_line);
+            }
+        } else {
+            showError(data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('Failed to make move');
+    }
+}
+
+async function startNewGame() {
+    try {
+        const response = await fetch('/api/new-game', {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            gameState = data.game_state;
+            renderBoard();
+            statusElement.textContent = "Player X's turn";
+            removeHighlights();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('Failed to start new game');
+    }
+}
+
+function renderBoard() {
+    if (!gameState) return;
+
+    boardElement.innerHTML = '';
+    gameState.board.forEach((cell, index) => {
+        const cellElement = document.createElement('div');
+        cellElement.classList.add('cell');
+
+        if (cell === 'X') cellElement.classList.add('x');
+        if (cell === 'O') cellElement.classList.add('o');
+
+        cellElement.textContent = cell;
+        cellElement.dataset.index = index;
+
+        // Only add click handler if game is not over and cell is empty
+        if (!gameState.game_over && cell === '') {
+            cellElement.addEventListener('click', () => makeMove(index));
+            cellElement.style.cursor = 'pointer';
+        } else {
+            cellElement.style.cursor = 'not-allowed';
+        }
+
+        boardElement.appendChild(cellElement);
+    });
+
+    // Update status if not already updated by move
+    if (!gameState.game_over) {
+        statusElement.textContent = `Player ${gameState.current_player}'s turn`;
+    } else if (gameState.winner) {
+        statusElement.textContent = `🎉 Player ${gameState.winner} wins! 🎉`;
+    } else {
+        statusElement.textContent = "🤝 It's a draw! 🤝";
+    }
+}
+
+function highlightWinningLine(winningLine) {
+    if (!winningLine) return;
+
+    const cells = document.querySelectorAll('.cell');
+    winningLine.forEach(index => {
+        cells[index].classList.add('win');
+    });
+}
+
+function removeHighlights() {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => cell.classList.remove('win'));
+}
+
+function showError(message) {
+    statusElement.textContent = `❌ ${message}`;
+    statusElement.style.color = '#ef4444';
+    setTimeout(() => {
+        statusElement.style.color = '';
+        if (gameState && !gameState.game_over) {
+            statusElement.textContent = `Player ${gameState.current_player}'s turn`;
+        }
+    }, 3000);
+}
+
+// Keyboard support for accessibility
+document.addEventListener('keydown', (e) => {
+    // Press 'r' to reset game
+    if (e.key.toLowerCase() === 'r') {
+        startNewGame();
+    }
+
+    // Number keys 1-9 for moves (accessibility feature)
+    if (e.key >= '1' && e.key <= '9' && gameState && !gameState.game_over) {
+        const position = parseInt(e.key) - 1;
+        if (gameState.board[position] === '') {
+            makeMove(position);
         }
     }
-
-    // Reset game
-    function resetGame() {
-        board = ['', '', '', '', '', '', '', '', ''];
-        currentPlayer = 'X';
-        gameActive = true;
-        statusElement.textContent = "Player X's turn";
-        renderBoard();
-    }
-
-    // Event listeners
-    resetBtn.addEventListener('click', resetGame);
-
-    // Initial render
-    renderBoard();
-    statusElement.textContent = "Player X's turn";
 });
