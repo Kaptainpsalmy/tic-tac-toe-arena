@@ -1,0 +1,277 @@
+/* static/css/style.css */
+
+/* Import cool fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0f172a;
+    font-family: 'Orbitron', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Animated background grid effect */
+body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.container {
+    background: #111827;
+    border-radius: 30px;
+    padding: 2.5rem;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        0 0 0 2px #22c55e33,
+        0 0 20px #22c55e33;
+    text-align: center;
+    max-width: 550px;
+    width: 90%;
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    animation: containerGlow 3s ease-in-out infinite;
+}
+
+@keyframes containerGlow {
+    0%, 100% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 2px #22c55e33, 0 0 20px #22c55e33; }
+    50% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 2px #22c55e66, 0 0 40px #22c55e66; }
+}
+
+h1 {
+    color: #e5e7eb;
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow:
+        0 0 10px #22c55e,
+        2px 2px 0 #0f172a;
+    position: relative;
+    display: inline-block;
+}
+
+h1::before {
+    content: '⚔️';
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px #22c55e);
+}
+
+h1::after {
+    content: '⚔️';
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px #22c55e);
+}
+
+.status {
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+    color: #9ca3af;
+    font-weight: 600;
+    padding: 0.8rem;
+    background: #1a1f2e;
+    border-radius: 15px;
+    border: 1px solid #22c55e33;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 2rem;
+    aspect-ratio: 1;
+    background: #1a1f2e;
+    padding: 15px;
+    border-radius: 25px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.cell {
+    background: #1f2933;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    aspect-ratio: 1;
+    box-shadow:
+        0 5px 0 #0f172a,
+        0 0 10px rgba(34, 197, 94, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.cell::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.cell:hover::before {
+    width: 100%;
+    height: 100%;
+}
+
+.cell:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 7px 0 #0f172a,
+        0 0 20px #22c55e;
+}
+
+.cell:active {
+    transform: translateY(5px);
+    box-shadow:
+        0 2px 0 #0f172a,
+        0 0 10px #22c55e;
+}
+
+.cell.x {
+    color: #22c55e;
+    text-shadow: 0 0 20px #22c55e;
+}
+
+.cell.o {
+    color: #f59e0b;
+    text-shadow: 0 0 20px #f59e0b;
+}
+
+/* Winning animation */
+.cell.win {
+    animation: winPulse 1s ease-in-out infinite;
+}
+
+@keyframes winPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.reset-btn {
+    background: #22c55e;
+    color: #0f172a;
+    border: none;
+    padding: 1.2rem 3rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 800;
+    box-shadow:
+        0 5px 0 #0f172a,
+        0 0 20px #22c55e;
+    position: relative;
+    overflow: hidden;
+}
+
+.reset-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.reset-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 7px 0 #0f172a,
+        0 0 30px #22c55e;
+    background: #2ed573;
+}
+
+.reset-btn:hover::before {
+    left: 100%;
+}
+
+.reset-btn:active {
+    transform: translateY(5px);
+    box-shadow:
+        0 2px 0 #0f172a,
+        0 0 20px #22c55e;
+}
+
+/* Responsive design */
+@media (max-width: 500px) {
+    .container {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h1::before, h1::after {
+        font-size: 1rem;
+        left: -25px;
+        right: -25px;
+    }
+
+    .cell {
+        font-size: 2.5rem;
+    }
+
+    .reset-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+/* Loading animation for future use */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading {
+    animation: spin 1s linear infinite;
+}
