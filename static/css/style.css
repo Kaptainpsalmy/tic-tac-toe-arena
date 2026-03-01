@@ -619,6 +619,248 @@ input:checked + .slider:before {
 
 
 
+/* AI Thinking Indicator */
+.ai-thinking {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 2px solid #22c55e;
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+    z-index: 100;
+    display: none;
+    min-width: 300px;
+}
+
+.ai-thinking.show {
+    display: block;
+    animation: fadeInScale 0.3s ease;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.thinking-content {
+    text-align: center;
+}
+
+.ai-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 3rem;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.thinking-dots {
+    font-size: 1.1rem;
+    color: #9ca3af;
+}
+
+.dot {
+    animation: blink 1.4s infinite;
+    animation-fill-mode: both;
+    font-size: 1.5rem;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0%, 20% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.thinking-progress {
+    height: 6px;
+    background: #1f2937;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    width: 0%;
+    transition: width 0.1s linear;
+    border-radius: 3px;
+}
+
+.ai-quote {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* AI Stats Card */
+.ai-stats-card {
+    background: #1a1f2e;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid #22c55e33;
+}
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #22c55e;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.reset-ai-stats {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.reset-ai-stats:hover {
+    color: #ef4444;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    background: #111827;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #22c55e;
+}
+
+.ai-personality {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: #111827;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.ai-personality i {
+    color: #22c55e;
+}
+
+/* Difficulty Badges */
+.difficulty-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.badge-easy {
+    background: #22c55e20;
+    color: #22c55e;
+    border: 1px solid #22c55e;
+}
+
+.badge-medium {
+    background: #f59e0b20;
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+}
+
+.badge-hard {
+    background: #ef444420;
+    color: #ef4444;
+    border: 1px solid #ef4444;
+}
+
+.badge-expert {
+    background: #8b5cf620;
+    color: #8b5cf6;
+    border: 1px solid #8b5cf6;
+}
+
+/* AI Move Highlight */
+.ai-move-highlight {
+    animation: aiThinkPulse 0.5s ease;
+}
+
+@keyframes aiThinkPulse {
+    0%, 100% { box-shadow: 0 0 0 0 #22c55e; }
+    50% { box-shadow: 0 0 30px 10px #22c55e; }
+}
+
+/* Mode Button Active States */
+.mode-btn[data-mode="ai-easy"].active {
+    background: #22c55e;
+    color: #0f172a;
+}
+
+.mode-btn[data-mode="ai-medium"].active {
+    background: #f59e0b;
+    color: #0f172a;
+}
+
+.mode-btn[data-mode="ai-hard"].active {
+    background: #ef4444;
+    color: white;
+}
+
+.mode-btn[data-mode="ai-expert"].active {
+    background: #8b5cf6;
+    color: white;
+}
+
 /* Notifications */
 .notification {
     position: fixed;
@@ -648,6 +890,8 @@ input:checked + .slider:before {
 .notification i {
     font-size: 1.2rem;
 }
+
+
 
 
 

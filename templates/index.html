@@ -68,6 +68,23 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- AI Thinking Indicator (appears during AI turn) -->
+                <div class="ai-thinking" id="aiThinking">
+                    <div class="thinking-content">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="thinking-text">
+                            <span class="ai-name" id="aiName">Master AI</span>
+                            <span class="thinking-dots">thinking<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>
+                        </div>
+                        <div class="thinking-progress">
+                            <div class="progress-bar" id="aiProgressBar"></div>
+                        </div>
+                        <div class="ai-quote" id="aiQuote"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Game Controls -->
@@ -86,25 +103,70 @@
                 </button>
             </div>
 
-            <!-- Game Modes (Future Feature) -->
+            <!-- Game Modes with AI Support -->
             <div class="game-modes">
                 <button class="mode-btn active" data-mode="2p">
                     <i class="fas fa-users"></i> 2 Player
                 </button>
                 <button class="mode-btn" data-mode="ai-easy">
                     <i class="fas fa-robot"></i> AI Easy
+                    <span class="difficulty-badge badge-easy">Novice</span>
+                </button>
+                <button class="mode-btn" data-mode="ai-medium">
+                    <i class="fas fa-brain"></i> AI Medium
+                    <span class="difficulty-badge badge-medium">Tactical</span>
                 </button>
                 <button class="mode-btn" data-mode="ai-hard">
-                    <i class="fas fa-brain"></i> AI Hard
+                    <i class="fas fa-crown"></i> AI Hard
+                    <span class="difficulty-badge badge-hard">Master</span>
+                </button>
+                <button class="mode-btn" data-mode="ai-expert">
+                    <i class="fas fa-skull"></i> AI Expert
+                    <span class="difficulty-badge badge-expert">Unbeatable</span>
                 </button>
             </div>
 
-            <!-- Move History (Optional) -->
+            <!-- AI Stats Card (visible only in AI mode) -->
+            <div class="ai-stats-card" id="aiStatsCard" style="display: none;">
+                <div class="stats-header">
+                    <i class="fas fa-chart-line"></i>
+                    <span>AI vs Human Stats</span>
+                    <button class="reset-ai-stats" id="resetAIStats" title="Reset Statistics">
+                        <i class="fas fa-redo-alt"></i>
+                    </button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">AI Wins</span>
+                        <span class="stat-value" id="aiWins">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Human Wins</span>
+                        <span class="stat-value" id="humanWins">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Win Rate</span>
+                        <span class="stat-value" id="aiWinRate">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Streak</span>
+                        <span class="stat-value" id="aiStreak">0</span>
+                    </div>
+                </div>
+                <div class="ai-personality" id="aiPersonality">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="aiDescription">Makes random moves - Perfect for beginners!</span>
+                </div>
+            </div>
+
+            <!-- Move History -->
             <div class="move-history" id="moveHistory">
                 <div class="history-header">
                     <i class="fas fa-list"></i>
                     <span>Move History</span>
-                    <button class="clear-history" id="clearHistory">Clear</button>
+                    <button class="clear-history" id="clearHistory" title="Clear History">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </div>
                 <div class="history-list" id="historyList">
                     <!-- Moves will appear here -->
@@ -160,13 +222,69 @@
                             <span class="slider round"></span>
                         </label>
                     </div>
+                    <div class="setting-item">
+                        <label>
+                            <i class="fas fa-robot"></i>
+                            AI Personality
+                        </label>
+                        <label class="switch">
+                            <input type="checkbox" id="aiQuotesToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
                 </div>
+                <div class="modal-footer">
+                    <button class="settings-save-btn" id="saveSettings">Save Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Info Modal (for showing AI personality details) -->
+        <div class="modal" id="infoModal">
+            <div class="modal-content info-modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-robot"></i> <span id="infoModalTitle">AI Difficulty</span></h2>
+                    <button class="close-modal" id="closeInfoModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="info-content" id="infoContent">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Tips Toggle -->
+        <button class="tips-toggle" id="tipsToggle" title="Show Tips">
+            <i class="fas fa-lightbulb"></i>
+        </button>
+
+        <!-- Tips Panel -->
+        <div class="tips-panel" id="tipsPanel">
+            <div class="tips-header">
+                <i class="fas fa-lightbulb"></i>
+                <span>Quick Tips</span>
+                <button class="close-tips" id="closeTips">&times;</button>
+            </div>
+            <div class="tips-content">
+                <ul class="tips-list">
+                    <li><i class="fas fa-keyboard"></i> Press 'R' to reset game</li>
+                    <li><i class="fas fa-keyboard"></i> Press 'U' to undo move</li>
+                    <li><i class="fas fa-keyboard"></i> Press 'ESC' to close modals</li>
+                    <li><i class="fas fa-robot"></i> AI Easy: Random moves</li>
+                    <li><i class="fas fa-brain"></i> AI Medium: Blocks your wins</li>
+                    <li><i class="fas fa-crown"></i> AI Hard: Minimax strategy</li>
+                    <li><i class="fas fa-skull"></i> AI Expert: Unbeatable!</li>
+                </ul>
             </div>
         </div>
     </div>
 
     <!-- Confetti Canvas -->
     <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;"></canvas>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
