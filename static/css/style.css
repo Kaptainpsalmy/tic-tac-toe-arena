@@ -861,6 +861,627 @@ input:checked + .slider:before {
     color: white;
 }
 
+
+/* ============ USER MENU STYLES (Continued) ============ */
+.dropdown-item:hover {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #22c55e33;
+    margin: 0.5rem 0;
+}
+
+.dropdown-arrow {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    transition: transform 0.3s ease;
+}
+
+.user-info:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Auth Buttons */
+.auth-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.auth-btn-small {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: 1px solid #22c55e;
+    color: #22c55e;
+}
+
+.auth-btn-small:hover {
+    background: #22c55e;
+    color: #0f172a;
+}
+
+.auth-btn-small.register {
+    background: #22c55e;
+    color: #0f172a;
+}
+
+.auth-btn-small.register:hover {
+    background: #16a34a;
+    border-color: #16a34a;
+}
+
+/* Save Game Button */
+.control-btn.save {
+    background: #3b82f6;
+    border-color: #3b82f633;
+}
+
+.control-btn.save:hover:not(:disabled) {
+    background: #2563eb;
+    color: white;
+}
+
+/* User Stats Card */
+.user-stats-card {
+    background: #1a1f2e;
+    border-radius: 15px;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 1px solid #3b82f633;
+    animation: slideIn 0.3s ease;
+}
+
+.user-stats-card .stats-header {
+    color: #3b82f6;
+    margin-bottom: 1rem;
+}
+
+.refresh-stats {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.refresh-stats:hover {
+    color: #3b82f6;
+    transform: rotate(180deg);
+}
+
+/* ============ MODAL STYLES ============ */
+
+/* Statistics Modal */
+.stats-modal {
+    max-width: 600px;
+}
+
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: #1f2937;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid #22c55e33;
+}
+
+.summary-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-bottom: 0.5rem;
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #22c55e;
+}
+
+.stats-chart {
+    margin: 2rem 0;
+    height: 200px;
+}
+
+.stats-details {
+    background: #1f2937;
+    border-radius: 15px;
+    padding: 1.5rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #374151;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row span {
+    color: #9ca3af;
+}
+
+.detail-row strong {
+    color: #22c55e;
+    font-size: 1.1rem;
+}
+
+/* Achievements Modal */
+.achievements-modal {
+    max-width: 700px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.achievement-card {
+    background: #1f2937;
+    border-radius: 15px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border: 1px solid #374151;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-card.earned {
+    border-color: #22c55e;
+    background: linear-gradient(145deg, #1f2937, #1a1f2e);
+}
+
+.achievement-card.earned::before {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background: #22c55e;
+    color: #0f172a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.achievement-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    filter: grayscale(1);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.achievement-card.earned .achievement-icon {
+    filter: grayscale(0);
+    opacity: 1;
+    animation: bounce 0.5s ease;
+}
+
+.achievement-name {
+    display: block;
+    font-weight: 600;
+    color: #e5e7eb;
+    margin-bottom: 0.3rem;
+}
+
+.achievement-desc {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+.achievement-date {
+    font-size: 0.7rem;
+    color: #22c55e;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+/* History Modal */
+.history-modal {
+    max-width: 700px;
+}
+
+.history-filters {
+    margin-bottom: 1rem;
+}
+
+.history-filters select {
+    width: 100%;
+    padding: 0.8rem;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.history-filters select:focus {
+    outline: none;
+    border-color: #22c55e;
+}
+
+.history-item {
+    background: #1f2937;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #374151;
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    border-color: #22c55e;
+    transform: translateX(5px);
+}
+
+.history-item.win {
+    border-left: 4px solid #22c55e;
+}
+
+.history-item.loss {
+    border-left: 4px solid #ef4444;
+}
+
+.history-item.draw {
+    border-left: 4px solid #f59e0b;
+}
+
+.history-info {
+    flex: 1;
+}
+
+.history-players {
+    font-weight: 600;
+    color: #e5e7eb;
+    margin-bottom: 0.3rem;
+}
+
+.history-result {
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+.history-result.win {
+    color: #22c55e;
+}
+
+.history-result.loss {
+    color: #ef4444;
+}
+
+.history-result.draw {
+    color: #f59e0b;
+}
+
+.history-meta {
+    text-align: right;
+}
+
+.history-date {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 0.3rem;
+}
+
+.history-moves {
+    font-size: 0.8rem;
+    color: #22c55e;
+}
+
+.history-view-btn {
+    background: none;
+    border: 1px solid #22c55e33;
+    color: #22c55e;
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 1rem;
+}
+
+.history-view-btn:hover {
+    background: #22c55e;
+    color: #0f172a;
+}
+
+.history-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.pagination-btn {
+    background: #1f2937;
+    border: 1px solid #374151;
+    color: #e5e7eb;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #22c55e;
+    color: #0f172a;
+    border-color: #22c55e;
+}
+
+.pagination-btn.active {
+    background: #22c55e;
+    color: #0f172a;
+    border-color: #22c55e;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Invite Modal */
+.invite-modal {
+    max-width: 500px;
+}
+
+.invite-modal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.invite-modal label {
+    display: block;
+    color: #e5e7eb;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.invite-modal input,
+.invite-modal select {
+    width: 100%;
+    padding: 0.8rem;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+}
+
+.invite-modal input:focus,
+.invite-modal select:focus {
+    outline: none;
+    border-color: #22c55e;
+}
+
+.invite-send-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #22c55e;
+    color: #0f172a;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.invite-send-btn:hover {
+    background: #16a34a;
+    transform: translateY(-2px);
+}
+
+.invite-link-container {
+    background: #1f2937;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.invite-link-container p {
+    color: #9ca3af;
+    margin-bottom: 0.5rem;
+}
+
+.invite-link-container input {
+    width: calc(100% - 50px);
+    display: inline-block;
+    background: #111827;
+    border: 1px solid #22c55e33;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.copy-link-btn {
+    width: 40px;
+    height: 40px;
+    background: #22c55e;
+    color: #0f172a;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 0.5rem;
+}
+
+.copy-link-btn:hover {
+    background: #16a34a;
+}
+
+/* Profile Page Styles (if you create a separate profile page) */
+.profile-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #111827;
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid #22c55e33;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background: #22c55e;
+    color: #0f172a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.profile-info h2 {
+    color: #e5e7eb;
+    margin-bottom: 0.5rem;
+}
+
+.profile-info p {
+    color: #9ca3af;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-box {
+    background: #1f2937;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.stat-box .label {
+    display: block;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-box .value {
+    display: block;
+    color: #22c55e;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Loading States */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #1f2937;
+    border-top-color: #22c55e;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #9ca3af;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Responsive Design for Modals */
+@media (max-width: 768px) {
+    .stats-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .history-meta {
+        text-align: center;
+    }
+
+    .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+
+
 /* Notifications */
 .notification {
     position: fixed;

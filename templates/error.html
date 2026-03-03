@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Tic Tac Toe Arena</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="particles"></div>
+
+        <div class="container" style="text-align: center; max-width: 500px;">
+            <div style="font-size: 5rem; margin-bottom: 1rem;">⚠️</div>
+            <h1 style="color: #ef4444; margin-bottom: 1rem;">Oops! Something went wrong</h1>
+            <p style="color: #9ca3af; margin-bottom: 2rem;">{{ error }}</p>
+            <div class="game-controls" style="justify-content: center;">
+                <a href="/" class="control-btn reset" style="text-decoration: none;">
+                    <i class="fas fa-home"></i>
+                    <span>Go to Home</span>
+                </a>
+                <button class="control-btn reset" onclick="window.location.reload()" style="background: #3b82f6;">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Try Again</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

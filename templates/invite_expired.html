@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite Expired - Tic Tac Toe Arena</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="particles"></div>
+
+        <div class="container" style="text-align: center; max-width: 500px;">
+            <div style="font-size: 5rem; margin-bottom: 1rem;">⌛</div>
+            <h1 style="color: #ef4444; margin-bottom: 1rem;">Invitation Expired</h1>
+            <p style="color: #9ca3af; margin-bottom: 2rem;">This game invitation is no longer valid. Invitations expire after 24 hours.</p>
+            <div class="game-controls" style="justify-content: center;">
+                <a href="/" class="control-btn reset" style="text-decoration: none;">
+                    <i class="fas fa-home"></i>
+                    <span>Go to Home</span>
+                </a>
+                <a href="/login" class="control-btn reset" style="text-decoration: none; background: #3b82f6;">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Login</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

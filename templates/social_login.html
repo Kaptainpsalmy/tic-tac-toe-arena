@@ -1,0 +1,142 @@
+<!-- Add this to login.html after the regular form -->
+<div class="social-divider">
+    <span>OR</span>
+</div>
+
+<div class="social-buttons">
+    <button onclick="socialLogin('discord')" class="social-btn discord">
+        <i class="fab fa-discord"></i>
+        <span>Continue with Discord</span>
+    </button>
+
+    <button onclick="socialLogin('google')" class="social-btn google">
+        <i class="fab fa-google"></i>
+        <span>Continue with Google</span>
+    </button>
+
+    <button onclick="socialLogin('github')" class="social-btn github">
+        <i class="fab fa-github"></i>
+        <span>Continue with GitHub</span>
+    </button>
+</div>
+
+<!-- Optional: X/Twitter button -->
+<button onclick="socialLogin('x')" class="social-btn x">
+    <i class="fab fa-x-twitter"></i>
+    <span>Continue with X</span>
+</button>
+
+<style>
+.social-divider {
+    text-align: center;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.social-divider::before,
+.social-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: #374151;
+}
+
+.social-divider::before {
+    left: 0;
+}
+
+.social-divider::after {
+    right: 0;
+}
+
+.social-divider span {
+    background: #111827;
+    padding: 0 1rem;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.social-btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.social-btn i {
+    font-size: 1.3rem;
+}
+
+/* Discord */
+.social-btn.discord {
+    background: #5865F2;
+}
+
+.social-btn.discord:hover {
+    background: #4752c4;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(88, 101, 242, 0.3);
+}
+
+/* Google */
+.social-btn.google {
+    background: #DB4437;
+}
+
+.social-btn.google:hover {
+    background: #c53929;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(219, 68, 55, 0.3);
+}
+
+/* GitHub */
+.social-btn.github {
+    background: #333;
+}
+
+.social-btn.github:hover {
+    background: #24292e;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* X/Twitter */
+.social-btn.x {
+    background: #000;
+    margin-top: 1rem;
+}
+
+.social-btn.x:hover {
+    background: #1DA1F2;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(29, 161, 242, 0.3);
+}
+
+.social-btn:active {
+    transform: translateY(0);
+}
+</style>
+
+<script>
+function socialLogin(provider) {
+    window.location.href = `/login/${provider}`;
+}
+</script>

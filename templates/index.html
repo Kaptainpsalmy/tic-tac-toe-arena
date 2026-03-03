@@ -17,6 +17,38 @@
 
         <!-- Main Game Container -->
         <div class="container">
+            <!-- User Menu (Top Right) -->
+<!-- User Menu (Top Right) -->
+<div class="user-menu">
+    {% if session.get('user_id') %}
+    <div class="user-info">
+        <span class="user-avatar">{{ session.get('nickname', 'P')[0]|upper }}</span>
+        <span class="user-name">{{ session.get('nickname', 'Player') }}</span>
+        <i class="fas fa-chevron-down dropdown-arrow"></i>
+        <div class="user-dropdown">
+            <a href="#" class="dropdown-item" id="showStats">
+                <i class="fas fa-chart-bar"></i> My Statistics
+            </a>
+            <a href="#" class="dropdown-item" id="showAchievements">
+                <i class="fas fa-trophy"></i> Achievements
+            </a>
+            <a href="#" class="dropdown-item" id="showHistory">
+                <i class="fas fa-history"></i> Game History
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="/logout" class="dropdown-item">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="auth-buttons">
+        <a href="/enter-arena" class="auth-btn-small" style="background: #22c55e; color: #0f172a;">
+            <i class="fas fa-sword"></i> Play Now
+        </a>
+    </div>
+    {% endif %}
+</div>
             <!-- Header with Arena Title -->
             <div class="header">
                 <h1>
@@ -29,13 +61,24 @@
             <div class="score-board">
                 <div class="player-card player-x">
                     <div class="player-icon">❌</div>
-                    <div class="player-name">Player X</div>
-                    <div class="player-score" id="scoreX">0</div>
+<div class="player-name">
+    {% if session.get('user_id') %}
+        <span class="player-username" id="playerXName">{{ session.get('nickname', 'Player') }}</span>
+    {% else %}
+        <span>Player X</span>
+    {% endif %}
+</div>                    <div class="player-score" id="scoreX">0</div>
                 </div>
                 <div class="vs-divider">VS</div>
                 <div class="player-card player-o">
                     <div class="player-icon">⭕</div>
-                    <div class="player-name">Player O</div>
+                    <div class="player-name">
+                        {% if aiMode %}
+                            <span id="playerOName">AI Opponent</span>
+                        {% else %}
+                            <span>Player O</span>
+                        {% endif %}
+                    </div>
                     <div class="player-score" id="scoreO">0</div>
                 </div>
             </div>
@@ -101,6 +144,12 @@
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </button>
+                {% if session.get('user_id') %}
+<button class="control-btn save" id="saveGameBtn" title="Save Game">
+    <i class="fas fa-save"></i>
+    <span>Save</span>
+</button>
+{% endif %}
             </div>
 
             <!-- Game Modes with AI Support -->
@@ -158,6 +207,38 @@
                     <span id="aiDescription">Makes random moves - Perfect for beginners!</span>
                 </div>
             </div>
+
+            <!-- User Stats Card (visible when logged in) -->
+           <!-- User Stats Card (visible when logged in) -->
+{% if session.get('user_id') %}
+<div class="user-stats-card" id="userStatsCard">
+    <div class="stats-header">
+        <i class="fas fa-chart-line"></i>
+        <span>Your Statistics</span>
+        <button class="refresh-stats" id="refreshStats" title="Refresh">
+            <i class="fas fa-sync-alt"></i>
+        </button>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <span class="stat-label">ELO Rating</span>
+            <span class="stat-value" id="userElo">1000</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Win Rate</span>
+            <span class="stat-value" id="userWinRate">0%</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Games</span>
+            <span class="stat-value" id="userGames">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Streak</span>
+            <span class="stat-value" id="userStreak">0</span>
+        </div>
+    </div>
+</div>
+{% endif %}
 
             <!-- Move History -->
             <div class="move-history" id="moveHistory">
@@ -225,19 +306,170 @@
                     <div class="setting-item">
                         <label>
                             <i class="fas fa-robot"></i>
-                            AI Personality
+                            AI Quotes
                         </label>
                         <label class="switch">
                             <input type="checkbox" id="aiQuotesToggle" checked>
                             <span class="slider round"></span>
                         </label>
                     </div>
+                    {% if current_user.is_authenticated %}
+                    <div class="setting-item">
+                        <label>
+                            <i class="fas fa-save"></i>
+                            Auto-save Games
+                        </label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoSaveToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="modal-footer">
                     <button class="settings-save-btn" id="saveSettings">Save Settings</button>
                 </div>
             </div>
         </div>
+
+        <!-- Statistics Modal -->
+        <div class="modal" id="statsModal">
+            <div class="modal-content stats-modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-chart-bar"></i> Your Statistics</h2>
+                    <button class="close-modal" id="closeStatsModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="stats-summary">
+                        <div class="summary-card">
+                            <div class="summary-icon">🏆</div>
+                            <div class="summary-details">
+                                <span class="summary-label">Wins</span>
+                                <span class="summary-value" id="statWins">0</span>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-icon">📉</div>
+                            <div class="summary-details">
+                                <span class="summary-label">Losses</span>
+                                <span class="summary-value" id="statLosses">0</span>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-icon">🤝</div>
+                            <div class="summary-details">
+                                <span class="summary-label">Draws</span>
+                                <span class="summary-value" id="statDraws">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-chart">
+                        <canvas id="statsChart"></canvas>
+                    </div>
+
+                    <div class="stats-details">
+                        <div class="detail-row">
+                            <span>ELO Rating:</span>
+                            <strong id="detailElo">1200</strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>Win Rate:</span>
+                            <strong id="detailWinRate">0%</strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>Total Games:</span>
+                            <strong id="detailGames">0</strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>Best Streak:</span>
+                            <strong id="detailBestStreak">0</strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>Avg Moves/Game:</span>
+                            <strong id="detailAvgMoves">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Modal -->
+        <div class="modal" id="achievementsModal">
+            <div class="modal-content achievements-modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-trophy"></i> Achievements</h2>
+                    <button class="close-modal" id="closeAchievementsModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="achievements-grid" id="achievementsGrid">
+                        <!-- Achievements will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game History Modal -->
+        <div class="modal" id="historyModal">
+            <div class="modal-content history-modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-history"></i> Game History</h2>
+                    <button class="close-modal" id="closeHistoryModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="history-filters">
+                        <select id="historyFilter">
+                            <option value="all">All Games</option>
+                            <option value="wins">Wins</option>
+                            <option value="losses">Losses</option>
+                            <option value="draws">Draws</option>
+                        </select>
+                    </div>
+                    <div class="history-list" id="gameHistoryList">
+                        <!-- Game history will be loaded here -->
+                    </div>
+                    <div class="history-pagination" id="historyPagination"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invite Friend Modal -->
+        {% if current_user.is_authenticated %}
+        <div class="modal" id="inviteModal">
+            <div class="modal-content invite-modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-envelope"></i> Invite Friend</h2>
+                    <button class="close-modal" id="closeInviteModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Send an invitation to play together!</p>
+                    <div class="form-group">
+                        <label for="inviteEmail">Friend's Email:</label>
+                        <input type="email" id="inviteEmail" placeholder="friend@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="inviteMode">Game Mode:</label>
+                        <select id="inviteMode">
+                            <option value="2p">2 Player</option>
+                            <option value="ai-easy">VS AI Easy</option>
+                            <option value="ai-medium">VS AI Medium</option>
+                            <option value="ai-hard">VS AI Hard</option>
+                        </select>
+                    </div>
+                    <button class="invite-send-btn" id="sendInvite">
+                        <i class="fas fa-paper-plane"></i> Send Invitation
+                    </button>
+                    <div class="invite-link-container" id="inviteLinkContainer" style="display: none;">
+                        <p>Share this link:</p>
+                        <input type="text" id="inviteLink" readonly>
+                        <button class="copy-link-btn" id="copyInviteLink">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
         <!-- Game Info Modal (for showing AI personality details) -->
         <div class="modal" id="infoModal">
@@ -275,6 +507,10 @@
                     <li><i class="fas fa-brain"></i> AI Medium: Blocks your wins</li>
                     <li><i class="fas fa-crown"></i> AI Hard: Minimax strategy</li>
                     <li><i class="fas fa-skull"></i> AI Expert: Unbeatable!</li>
+                    {% if current_user.is_authenticated %}
+                    <li><i class="fas fa-trophy"></i> Earn achievements by playing</li>
+                    <li><i class="fas fa-chart-line"></i> Track your ELO rating</li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -286,6 +522,7 @@
     <!-- Toast Notification Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

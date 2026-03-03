@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Arena - Tic Tac Toe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        .login-card {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            text-align: center;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #22c55e;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #e5e7eb;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nickname-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: #1f2937;
+            border: 2px solid #374151;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .nickname-input:focus {
+            outline: none;
+            border-color: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+            background: #2d3748;
+        }
+
+        .nickname-input::placeholder {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .enter-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #0f172a;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1.5rem 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .enter-btn:active {
+            transform: translateY(0);
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-item i {
+            color: #22c55e;
+        }
+
+        .guest-note {
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #1f2937;
+            border-radius: 10px;
+            border: 1px dashed #374151;
+        }
+
+        .guest-note i {
+            color: #f59e0b;
+            margin-right: 0.3rem;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        .recent-players {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .recent-title {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-chip {
+            display: inline-block;
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #374151;
+        }
+
+        .player-chip:hover {
+            background: #22c55e;
+            color: #0f172a;
+            border-color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>⚔️ TIC TAC TOE</h1>
+        <div class="subtitle">Enter the Arena</div>
+
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText"></span>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="nickname">Choose your fighter name</label>
+                <input type="text"
+                       id="nickname"
+                       name="nickname"
+                       class="nickname-input"
+                       placeholder="e.g., Warrior, Champion, Legend..."
+                       maxlength="30"
+                       autofocus
+                       required>
+            </div>
+
+            <button type="submit" class="enter-btn" id="enterBtn">
+                <i class="fas fa-sword"></i>
+                <span>Enter Arena</span>
+                <i class="fas fa-sword"></i>
+            </button>
+        </form>
+
+        <div class="features">
+            <div class="feature-item">
+                <i class="fas fa-bolt"></i>
+                <span>Instant Play</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Auto-save Stats</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-trophy"></i>
+                <span>Leaderboard</span>
+            </div>
+        </div>
+
+        <div class="guest-note">
+            <i class="fas fa-info-circle"></i>
+            No password needed! Just pick a name and play. Your progress will be saved automatically.
+        </div>
+
+        <div class="recent-players" id="recentPlayers" style="display: none;">
+            <div class="recent-title">⚔️ Recent Warriors</div>
+            <div id="recentList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load recent nicknames from localStorage
+        function loadRecentPlayers() {
+            const recent = JSON.parse(localStorage.getItem('recentPlayers') || '[]');
+            if (recent.length > 0) {
+                document.getElementById('recentPlayers').style.display = 'block';
+                const list = document.getElementById('recentList');
+                list.innerHTML = '';
+                recent.slice(0, 5).forEach(name => {
+                    const chip = document.createElement('span');
+                    chip.className = 'player-chip';
+                    chip.textContent = name;
+                    chip.onclick = () => {
+                        document.getElementById('nickname').value = name;
+                    };
+                    list.appendChild(chip);
+                });
+            }
+        }
+
+        // Save nickname to recent list
+        function saveToRecent(nickname) {
+            let recent = JSON.parse(localStorage.getItem('recentPlayers') || '[]');
+            recent = [nickname, ...recent.filter(n => n !== nickname)].slice(0, 5);
+            localStorage.setItem('recentPlayers', JSON.stringify(recent));
+        }
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nickname = document.getElementById('nickname').value.trim();
+            if (!nickname) {
+                showError('Please enter a nickname');
+                return;
+            }
+
+            const enterBtn = document.getElementById('enterBtn');
+            enterBtn.disabled = true;
+            enterBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entering Arena...';
+
+            try {
+                const response = await fetch('/api/enter-arena', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nickname })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    saveToRecent(nickname);
+                    window.location.href = '/';
+                } else {
+                    showError(data.message);
+                    enterBtn.disabled = false;
+                    enterBtn.innerHTML = '<i class="fas fa-sword"></i><span>Enter Arena</span><i class="fas fa-sword"></i>';
+                }
+            } catch (error) {
+                showError('Connection error. Please try again.');
+                enterBtn.disabled = false;
+                enterBtn.innerHTML = '<i class="fas fa-sword"></i><span>Enter Arena</span><i class="fas fa-sword"></i>';
+            }
+        });
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorEl.classList.add('show');
+
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 3000);
+        }
+
+        // Load recent players on page load
+        loadRecentPlayers();
+    </script>
+</body>
+</html>
